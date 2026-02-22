@@ -149,8 +149,14 @@ def collect_inventory(root: Path, profile: ReorgProfile) -> List[FileRec]:
             st = p.stat()
         except FileNotFoundError:
             continue
+        except PermissionError:
+            continue
+        try:
+            file_hash = sha256sum(p)
+        except (FileNotFoundError, PermissionError, OSError):
+            continue
         records.append(
-            FileRec(path=p, size=st.st_size, mtime=st.st_mtime, sha256=sha256sum(p), ext=extension(p))
+            FileRec(path=p, size=st.st_size, mtime=st.st_mtime, sha256=file_hash, ext=extension(p))
         )
     return records
 
