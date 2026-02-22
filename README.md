@@ -5,6 +5,8 @@
 ![Profiles](https://img.shields.io/badge/Config-TOML-purple)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
+![Conservative File Reorg Social Preview](.github/social-preview.png)
+
 A modular, context-aware file reorganization skill designed to be **safe first**, **low cognitive load**, and **fully inspectable**.
 
 ## Why this exists
@@ -83,6 +85,12 @@ Key files:
 - `apply.log`
 - `rollback_from_apply_log.csv`
 - `summary.json`
+
+## GitHub social preview
+To make repository link shares use the branded card:
+1. Open repository `Settings`.
+2. Open `General`.
+3. In `Social preview`, upload `.github/social-preview.png`.
 
 ## Repository layout
 - `conservative-file-reorg/SKILL.md`: Codex skill trigger + workflow contract
