@@ -1,0 +1,123 @@
+[metadata]
+name = "documents-default"
+description = "Conservative default profile for personal Documents cleanup with duplicate staging and rollback safety."
+
+[taxonomy]
+folders = [
+  "00_Inbox",
+  "10_Identity_Legal",
+  "20_Health_Disability",
+  "30_Finance_Tax_Benefits",
+  "40_Housing_Insurance",
+  "50_Career_Resumes",
+  "60_Projects_Writing",
+  "70_Reference_Education",
+  "90_Archive",
+  "99_Review_Duplicates",
+]
+inbox = "00_Inbox"
+review_exact = "99_Review_Duplicates/Exact"
+review_needs = "99_Review_Duplicates/Needs_Review"
+archive = "90_Archive"
+
+[policies]
+conservative = true
+no_delete = true
+touch_symlinks = false
+min_confidence = 0.72
+exclude_top_level = [".docsys", ".git", "node_modules"]
+
+[context_awareness]
+enabled = true
+prefer_existing_category = true
+low_confidence_to_inbox = true
+
+[inbox_policy]
+keep_filenames = ["README.md", ".DS_Store"]
+
+[[protected_paths]]
+path = "Obsidian Vault"
+reason = "app-managed"
+
+[[protected_paths]]
+path = "Welcome to Bear 👋"
+reason = "app-managed"
+
+[[protected_paths]]
+path = "BFD Drums"
+reason = "app-managed"
+
+[[protected_paths]]
+path = "BearBk"
+reason = "app-managed"
+
+[[protected_paths]]
+path = "MPC"
+reason = "app-managed"
+
+[[protected_paths]]
+path = "MPC 3"
+reason = "app-managed"
+
+[[protected_paths]]
+path = "PhoenixDown"
+reason = "app-managed"
+
+[archive]
+root = "{HOME}/Archives/Documents_Large_Artifacts"
+non_document_over_mb = 200
+name_patterns = ["trace"]
+document_extensions = [
+  "pdf", "doc", "docx", "txt", "md", "rtf", "ppt", "pptx", "xls", "xlsx",
+  "csv", "tsv", "png", "jpg", "jpeg", "gif", "svg", "heic", "webp", "json",
+  "xml", "vcf", "pages", "epub", "cer", "certsigningrequest", "textclipping"
+]
+
+[[category]]
+name = "identity_legal"
+folder = "10_Identity_Legal"
+keywords = ["passport", "license", "citation", "ncdl", "caid", "certificatesigningrequest"]
+extensions = ["pdf", "png", "jpg", "doc", "docx", "cer", "certsigningrequest"]
+weight = 1.00
+
+[[category]]
+name = "health_disability"
+folder = "20_Health_Disability"
+keywords = ["ssa", "ssdi", "disability", "fmla", "medical", "health", "emr", "immunization", "ha-4631", "rtw", "scanned document"]
+extensions = ["pdf", "png", "xml", "htm", "xsl", "css"]
+weight = 1.00
+
+[[category]]
+name = "finance_tax_benefits"
+folder = "30_Finance_Tax_Benefits"
+keywords = ["tax", "1099", "w2", "federal", "state", "direct deposit", "payslip", "fidelity", "chime", "wages", "nc-4", "fw4", "f8822", "payment"]
+extensions = ["pdf", "csv", "xlsx"]
+weight = 1.00
+
+[[category]]
+name = "housing_insurance"
+folder = "40_Housing_Insurance"
+keywords = ["lease", "rent", "insurance", "id card", "memberid", "welcome letter", "cosignerapp", "damages"]
+extensions = ["pdf", "png", "jpg"]
+weight = 0.95
+
+[[category]]
+name = "career_resumes"
+folder = "50_Career_Resumes"
+keywords = ["resume", "cv", "cover letter", "cover_letter", "offer letter", "resignation", "social_media_marketing_manager", "content manager"]
+extensions = ["pdf", "doc", "docx", "txt"]
+weight = 1.00
+
+[[category]]
+name = "projects_writing"
+folder = "60_Projects_Writing"
+keywords = ["secure_pride", "logo", "screenshot", "prompt", "script", "config", "private.zip", "mime-attachment", "rayn", "goldmund"]
+extensions = ["md", "txt", "json", "zip", "svg", "png", "css", "js", "conf", "vsix"]
+weight = 0.90
+
+[[category]]
+name = "reference_education"
+folder = "70_Reference_Education"
+keywords = ["transcript", "courses", "oasis", "financial aid", "termpaper", "sta108"]
+extensions = ["pdf", "doc", "docx", "ppt", "pptx"]
+weight = 0.92

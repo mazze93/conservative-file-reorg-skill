@@ -1,0 +1,91 @@
+[metadata]
+name = "generic-default"
+description = "Generic conservative profile for multi-purpose folder cleanup."
+
+[taxonomy]
+folders = [
+  "00_Inbox",
+  "10_Identity_Legal",
+  "20_Health_Disability",
+  "30_Finance_Tax_Benefits",
+  "40_Housing_Insurance",
+  "50_Career_Resumes",
+  "60_Projects_Writing",
+  "70_Reference_Education",
+  "90_Archive",
+  "99_Review_Duplicates",
+]
+inbox = "00_Inbox"
+review_exact = "99_Review_Duplicates/Exact"
+review_needs = "99_Review_Duplicates/Needs_Review"
+archive = "90_Archive"
+
+[policies]
+conservative = true
+no_delete = true
+touch_symlinks = false
+min_confidence = 0.74
+exclude_top_level = [".docsys", ".git", "node_modules"]
+
+[context_awareness]
+enabled = true
+prefer_existing_category = true
+low_confidence_to_inbox = true
+
+[inbox_policy]
+keep_filenames = ["README.md", ".DS_Store"]
+
+[archive]
+root = "{HOME}/Archives/File_Reorg_Artifacts"
+non_document_over_mb = 250
+name_patterns = ["trace", "dump", "core"]
+document_extensions = ["pdf", "doc", "docx", "txt", "md", "rtf", "ppt", "pptx", "xls", "xlsx", "csv", "tsv", "png", "jpg", "jpeg", "gif", "svg", "json", "xml"]
+
+[[category]]
+name = "identity_legal"
+folder = "10_Identity_Legal"
+keywords = ["passport", "license", "identity", "permit", "citation", "legal"]
+extensions = ["pdf", "png", "jpg", "doc", "docx"]
+weight = 1.00
+
+[[category]]
+name = "health_disability"
+folder = "20_Health_Disability"
+keywords = ["health", "medical", "doctor", "clinical", "disability", "ssa", "ssdi"]
+extensions = ["pdf", "png", "jpg", "xml"]
+weight = 1.00
+
+[[category]]
+name = "finance_tax_benefits"
+folder = "30_Finance_Tax_Benefits"
+keywords = ["invoice", "statement", "tax", "w2", "1099", "receipt", "payment", "payroll", "benefits"]
+extensions = ["pdf", "csv", "xlsx", "json"]
+weight = 1.00
+
+[[category]]
+name = "housing_insurance"
+folder = "40_Housing_Insurance"
+keywords = ["lease", "rent", "housing", "insurance", "policy", "claim", "vehicle"]
+extensions = ["pdf", "png", "jpg"]
+weight = 0.95
+
+[[category]]
+name = "career_resumes"
+folder = "50_Career_Resumes"
+keywords = ["resume", "cv", "cover letter", "portfolio", "offer letter", "job", "application"]
+extensions = ["pdf", "doc", "docx"]
+weight = 1.00
+
+[[category]]
+name = "projects_writing"
+folder = "60_Projects_Writing"
+keywords = ["project", "draft", "notes", "logo", "design", "script", "config", "readme"]
+extensions = ["md", "txt", "json", "yaml", "yml", "zip", "svg", "png", "jpg", "js", "ts", "py", "sh"]
+weight = 0.90
+
+[[category]]
+name = "reference_education"
+folder = "70_Reference_Education"
+keywords = ["transcript", "course", "syllabus", "reference", "handbook", "manual", "education"]
+extensions = ["pdf", "doc", "docx", "ppt", "pptx"]
+weight = 0.92

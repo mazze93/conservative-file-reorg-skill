@@ -1,0 +1,4 @@
+interface:
+  display_name: "Conservative File Reorg"
+  short_description: "Conservative file cleanup with rollback"
+  default_prompt: "Audit, plan, and conservatively reorganize files with transparent reports and rollback safety."
