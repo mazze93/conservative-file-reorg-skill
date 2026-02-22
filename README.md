@@ -1,81 +1,107 @@
-# Conservative File Reorg Skill
+# Conservative File Reorg
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Mode](https://img.shields.io/badge/Default-Conservative-success)
+![Safety](https://img.shields.io/badge/Rollback-First-critical)
+![Profiles](https://img.shields.io/badge/Config-TOML-purple)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
-A conservative, low-cognitive-load, transparent file-overhaul toolkit for Codex skills.
+A modular, context-aware file reorganization skill designed to be **safe first**, **low cognitive load**, and **fully inspectable**.
 
-## What this is
-- A reusable Codex skill: `conservative-file-reorg`
-- A profile-driven Python engine for audit/plan/apply workflows
-- A rollback-aware workflow with append-only logs and CSV artifacts
+## Why this exists
+Most folder cleanups fail in one of two ways:
+- too manual to maintain
+- too aggressive to trust
 
-## What it does (safe by default)
-- Audits a directory tree and fingerprints files
-- Plans deterministic moves into a taxonomy
-- Stages duplicates for review instead of deleting
-- Reclassifies inboxes with stricter rules
-- Archives large non-document artifacts by explicit rules
-- Generates one-command rollback data
+This project is built for the middle path:
+- conservative by design
+- deterministic where it matters
+- reversible when mistakes happen
 
-## 60-second quickstart (ADHD-friendly)
+## Core promises
+- No destructive cleanup by default
+- Duplicate staging instead of deletion
+- Explicit CSV reports for every run
+- Append-only operation logs
+- One-command rollback support
+- Profile-based modulation instead of hardcoded behavior
+
+## Fast start (ADHD-friendly)
 1. `cd /Users/daedalus/Code/personal/conservative-file-reorg-skill/conservative-file-reorg`
-2. Run audit:
+2. Run `audit`.
+3. Run `plan` and inspect `move_plan.csv` + `review_queue.csv`.
+4. Run `apply` only after review.
+5. Build rollback CSV.
 
 ```bash
 python3 scripts/file_reorg.py audit --root /ABSOLUTE/ROOT --profile references/documents-default.toml --report-date 2026-02-22
-```
-
-3. Run plan and inspect CSVs:
-
-```bash
 python3 scripts/file_reorg.py plan --root /ABSOLUTE/ROOT --profile references/documents-default.toml --scope loose --report-date 2026-02-22
-```
-
-4. Apply only after review:
-
-```bash
 python3 scripts/file_reorg.py apply --root /ABSOLUTE/ROOT --profile references/documents-default.toml --scope loose --report-date 2026-02-22
-```
-
-5. Build rollback:
-
-```bash
 python3 scripts/file_reorg.py build-rollback --root /ABSOLUTE/ROOT --profile references/documents-default.toml --report-date 2026-02-22
 ```
 
-6. Undo if needed:
+Undo if needed:
 
 ```bash
 python3 scripts/file_reorg.py undo --rollback-csv /ABSOLUTE/ROOT/.docsys/reports/2026-02-22/rollback_from_apply_log.csv
 ```
 
-## Key behavior constraints
-- No deletion in normal workflow (`no_delete=true`)
-- Protected paths are never reorganized
-- Low-confidence routing goes to inbox
-- Duplicate collisions are staged, not removed
-- All meaningful operations are logged and reversible
+## Profile modulation
+Use profiles to adapt behavior for different roots without rewriting code.
 
-## Modulation model
-Adjust behavior by editing TOML profile files under `conservative-file-reorg/references/`.
+Included profiles:
+- `conservative-file-reorg/references/documents-default.toml`
+- `conservative-file-reorg/references/generic-default.toml`
 
-- `documents-default.toml`: tuned for personal Documents cleanup
-- `generic-default.toml`: reusable baseline for other roots
+Generate a new profile:
 
-## Repository structure
-- `conservative-file-reorg/SKILL.md`: trigger + workflow instructions
-- `conservative-file-reorg/scripts/file_reorg.py`: engine
-- `conservative-file-reorg/references/*.toml`: profile presets
-- `conservative-file-reorg/agents/openai.yaml`: UI metadata
+```bash
+python3 scripts/new_profile.py \
+  --template generic \
+  --root /ABSOLUTE/ROOT \
+  --detect-protected \
+  --profile-id my-root-profile \
+  --description "Conservative profile for my root" \
+  --output references/my-root-profile.toml
+```
+
+Then run with it:
+
+```bash
+python3 scripts/file_reorg.py plan --root /ABSOLUTE/ROOT --profile references/my-root-profile.toml --scope loose --report-date 2026-02-22
+```
+
+## Transparent outputs
+Every run writes artifacts under:
+- `/ABSOLUTE/ROOT/.docsys/reports/<date>/`
+
+Key files:
+- `inventory.csv`
+- `exact_hash_duplicates.csv`
+- `name_variant_candidates.csv`
+- `move_plan.csv`
+- `review_queue.csv`
+- `apply.log`
+- `rollback_from_apply_log.csv`
+- `summary.json`
+
+## Repository layout
+- `conservative-file-reorg/SKILL.md`: Codex skill trigger + workflow contract
+- `conservative-file-reorg/scripts/file_reorg.py`: audit/plan/apply/reclassify/rollback engine
+- `conservative-file-reorg/scripts/new_profile.py`: profile generator helper
+- `conservative-file-reorg/references/*.toml`: reusable configuration profiles
+- `conservative-file-reorg/agents/openai.yaml`: skill UI metadata
 
 ## Install as local Codex skill
-Create/update symlink:
-
 ```bash
 ln -sfn /Users/daedalus/Code/personal/conservative-file-reorg-skill/conservative-file-reorg /Users/daedalus/.codex/skills/conservative-file-reorg
 ```
 
-## Best-practice alignment
-This repo intentionally follows your filesystem-overhaul standards:
+## Design stance
+This repo follows your FILESYSTEM OVERHAUL principles:
 - canonical project storage under `/Users/daedalus/Code`
-- deterministic path contracts
-- aggressive transparency via reports and logs
-- rollback-first safety controls
+- clear boundary between persistent configs and generated reports
+- terminal-first reproducibility
+- transparency and rollback over automation bravado
+
+## License
+MIT

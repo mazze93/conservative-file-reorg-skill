@@ -1,78 +1,81 @@
 ---
 name: conservative-file-reorg
-description: Conservative, transparent, context-aware file reorganization for local folders with deterministic taxonomy, duplicate staging, report generation, and rollback safety. Use when a user asks to clean up or systematize a directory tree, reclassify inbox folders, create repeatable file-overhaul workflows, generate audit/plan/apply reports, or undo a prior reorganization run.
+description: Conservative, transparent, context-aware file reorganization for local folders with deterministic taxonomy, duplicate staging, report generation, profile modulation, and rollback safety. Use when a user asks to clean up or systematize a directory tree, reclassify inbox folders, create repeatable file-overhaul workflows, generate audit/plan/apply reports, generate custom reorg profiles, or undo a prior reorganization run.
 ---
 
 # Conservative File Reorg
 
-## Use this workflow
-1. Select a profile:
-- `references/documents-default.toml` for personal Documents workflows.
-- `references/generic-default.toml` for general folders.
-2. Run `audit` first.
-3. Run `plan` and inspect `move_plan.csv` and `review_queue.csv`.
-4. Run `apply` only after validating the plan.
-5. Build rollback CSV and keep it with the same report date.
+## Workflow contract
+1. Choose a profile file.
+2. Run `audit`.
+3. Run `plan` and inspect CSV outputs.
+4. Run `apply` only after plan review.
+5. Build rollback CSV.
+6. Run `reclassify-inbox` as second pass when needed.
 
 ## Safety constraints
-- Keep `no_delete=true` for conservative operation.
+- Keep `no_delete=true` for conservative behavior.
 - Stage exact duplicates under `99_Review_Duplicates/Exact/<date>/`.
 - Stage variant mismatches under `99_Review_Duplicates/Needs_Review/<date>/`.
 - Never mutate protected paths listed in profile.
 - Keep append-only logs in `.docsys/reports/<date>/apply.log`.
 
-## Run commands
-Use absolute paths for reproducibility.
-
+## Commands
 ```bash
-# 1) Audit only
+# Audit
 python3 scripts/file_reorg.py audit \
   --root /ABSOLUTE/ROOT \
   --profile references/documents-default.toml \
   --report-date 2026-02-22
 
-# 2) Plan without moving files
+# Plan
 python3 scripts/file_reorg.py plan \
   --root /ABSOLUTE/ROOT \
   --profile references/documents-default.toml \
   --scope loose \
   --report-date 2026-02-22
 
-# 3) Apply conservative moves
+# Apply
 python3 scripts/file_reorg.py apply \
   --root /ABSOLUTE/ROOT \
   --profile references/documents-default.toml \
   --scope loose \
   --report-date 2026-02-22
 
-# 4) Reclassify inbox with stricter pass
+# Reclassify inbox
 python3 scripts/file_reorg.py reclassify-inbox \
   --root /ABSOLUTE/ROOT \
   --profile references/documents-default.toml \
   --report-date 2026-02-22
 
-# 5) Build rollback CSV from apply.log
+# Build rollback
 python3 scripts/file_reorg.py build-rollback \
   --root /ABSOLUTE/ROOT \
   --profile references/documents-default.toml \
   --report-date 2026-02-22
 
-# 6) Undo from rollback CSV
+# Undo
 python3 scripts/file_reorg.py undo \
   --rollback-csv /ABSOLUTE/ROOT/.docsys/reports/2026-02-22/rollback_from_apply_log.csv
 ```
 
-## Modulate behavior through profiles
-Edit profile TOML instead of rewriting logic.
+## Profile modulation
+Create a tailored profile with `new_profile.py`.
 
-- Tune taxonomy with `taxonomy.folders` and `taxonomy.inbox`.
-- Tune conservatism with `policies.min_confidence` and `context_awareness.low_confidence_to_inbox`.
-- Tune protected areas with `[[protected_paths]]`.
-- Tune categorization with `[[category]]` keyword and extension lists.
-- Tune large-file archiving with `[archive]` settings.
+```bash
+python3 scripts/new_profile.py \
+  --template generic \
+  --root /ABSOLUTE/ROOT \
+  --detect-protected \
+  --profile-id my-root-profile \
+  --description "Conservative profile for my root" \
+  --output references/my-root-profile.toml
+```
 
-## Preserve transparency and checks
-Inspect these outputs on every run:
+Use your generated profile in subsequent runs.
+
+## Transparency checks
+Inspect:
 - `.docsys/reports/<date>/inventory.csv`
 - `.docsys/reports/<date>/exact_hash_duplicates.csv`
 - `.docsys/reports/<date>/name_variant_candidates.csv`
@@ -82,8 +85,7 @@ Inspect these outputs on every run:
 - `.docsys/reports/<date>/rollback_from_apply_log.csv`
 - `.docsys/reports/<date>/summary.json`
 
-## Keep project storage aligned with filesystem-overhaul best practices
-- Store this skill project in `/Users/daedalus/Code/...`.
-- Keep versioned project files in git.
-- Avoid developing this skill directly inside `Desktop` or `Documents`.
-- Keep generated run artifacts in target folder `.docsys/reports/<date>/`.
+## Storage and versioning stance
+- Store project files in `/Users/daedalus/Code/...`.
+- Keep generated run artifacts inside target root `.docsys/reports/<date>/`.
+- Keep profile definitions in git for reproducibility.
