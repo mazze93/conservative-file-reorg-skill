@@ -105,7 +105,7 @@ ln -sfn /Users/daedalus/Code/personal/conservative-file-reorg-skill/conservative
 ```
 
 ## Design stance
-This repo follows your FILESYSTEM OVERHAUL principles:
+This repo follows FILESYSTEM OVERHAUL principles:
 - canonical project storage under `/Users/daedalus/Code`
 - clear boundary between persistent configs and generated reports
 - terminal-first reproducibility
